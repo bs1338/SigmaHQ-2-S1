@@ -1,1 +1,1 @@
-Sigma Rules from SigmaHQ converted for SentinelOne
+Sigma Rules from SigmaHQ converted for SentinelOne DeepVisibility
