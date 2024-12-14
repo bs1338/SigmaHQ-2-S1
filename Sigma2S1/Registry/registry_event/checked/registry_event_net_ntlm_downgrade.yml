@@ -1,0 +1,42 @@
+author: Florian Roth (Nextron Systems), wagga, Nasreddine Bencherchali (Splunk STRT)
+date: 2018-03-20
+description: Detects NetNTLM downgrade attack
+detection:
+  condition: selection_regkey and 1 of selection_value_*
+  selection_regkey:
+    TargetObject|contains|all:
+    - SYSTEM\
+    - ControlSet
+    - \Control\Lsa
+  selection_value_lmcompatibilitylevel:
+    Details:
+    - DWORD (0x00000000)
+    - DWORD (0x00000001)
+    - DWORD (0x00000002)
+    TargetObject|endswith: \lmcompatibilitylevel
+  selection_value_ntlmminclientsec:
+    Details:
+    - DWORD (0x00000000)
+    - DWORD (0x00000010)
+    - DWORD (0x00000020)
+    - DWORD (0x00000030)
+    TargetObject|endswith: \NtlmMinClientSec
+  selection_value_restrictsendingntlmtraffic:
+    TargetObject|endswith: \RestrictSendingNTLMTraffic
+falsepositives:
+- Services or tools that set the values to more restrictive values
+id: d67572a0-e2ec-45d6-b8db-c100d14b8ef2
+level: high
+logsource:
+  category: registry_event
+  product: windows
+modified: 2024-12-03
+references:
+- https://web.archive.org/web/20171113231705/https://www.optiv.com/blog/post-exploitation-using-netntlm-downgrade-attacks
+- https://www.ultimatewindowssecurity.com/wiki/page.aspx?spid=NSrpcservers
+status: test
+tags:
+- attack.defense-evasion
+- attack.t1562.001
+- attack.t1112
+title: NetNTLM Downgrade Attack - Registry

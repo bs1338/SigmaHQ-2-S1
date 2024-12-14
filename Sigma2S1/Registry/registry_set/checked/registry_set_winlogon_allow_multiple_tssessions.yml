@@ -1,0 +1,27 @@
+author: Nasreddine Bencherchali (Nextron Systems)
+date: 2022-09-09
+description: "Detects when the 'AllowMultipleTSSessions' value is enabled.\nWhich
+  allows for multiple Remote Desktop connection sessions to be opened at once.\nThis
+  is often used by attacker as a way to connect to an RDP session without disconnecting
+  the other users\n"
+detection:
+  condition: selection
+  selection:
+    Details|endswith: DWORD (0x00000001)
+    TargetObject|endswith: \Microsoft\Windows NT\CurrentVersion\Winlogon\AllowMultipleTSSessions
+falsepositives:
+- Legitimate use of the multi session functionality
+id: f7997770-92c3-4ec9-b112-774c4ef96f96
+level: medium
+logsource:
+  category: registry_set
+  product: windows
+modified: 2023-08-17
+references:
+- http://blog.talosintelligence.com/2022/09/lazarus-three-rats.html
+status: test
+tags:
+- attack.persistence
+- attack.defense-evasion
+- attack.t1112
+title: Winlogon AllowMultipleTSSessions Enable

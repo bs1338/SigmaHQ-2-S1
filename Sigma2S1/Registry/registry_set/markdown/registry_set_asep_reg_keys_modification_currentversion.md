@@ -1,0 +1,35 @@
+# registry_set_asep_reg_keys_modification_currentversion
+
+## Title
+CurrentVersion Autorun Keys Modification
+
+## ID
+20f0ee37-5942-4e45-b7d5-c5b5db9df5cd
+
+## Author
+Victor Sergeev, Daniil Yugoslavskiy, Gleb Sukhodolskiy, Timur Zinniatullin, oscd.community, Tim Shelton, frack113 (split)
+
+## Date
+2019-10-25
+
+## Tags
+attack.persistence, attack.t1547.001
+
+## Description
+Detects modification of autostart extensibility point (ASEP) in registry.
+
+## References
+https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1547.001/T1547.001.md
+https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns
+https://gist.github.com/GlebSukhodolskiy/0fc5fa5f482903064b448890db1eaf9d
+https://oddvar.moe/2018/03/21/persistence-using-runonceex-hidden-from-autoruns-exe/
+
+## False Positives
+Legitimate software automatically (mostly, during installation) sets up autorun keys for legitimate reason
+Legitimate administrator sets up autorun keys for legitimate reason
+
+## SentinelOne Query
+```
+ObjectType = "Registry" AND (EndpointOS = "windows" AND ((RegistryKeyPath containsCIS "\SOFTWARE\Microsoft\Windows\CurrentVersion" AND (RegistryKeyPath containsCIS "\ShellServiceObjectDelayLoad" OR RegistryKeyPath containsCIS "\Run\" OR RegistryKeyPath containsCIS "\RunOnce\" OR RegistryKeyPath containsCIS "\RunOnceEx\" OR RegistryKeyPath containsCIS "\RunServices\" OR RegistryKeyPath containsCIS "\RunServicesOnce\" OR RegistryKeyPath containsCIS "\Policies\System\Shell" OR RegistryKeyPath containsCIS "\Policies\Explorer\Run" OR RegistryKeyPath containsCIS "\Group Policy\Scripts\Startup" OR RegistryKeyPath containsCIS "\Group Policy\Scripts\Shutdown" OR RegistryKeyPath containsCIS "\Group Policy\Scripts\Logon" OR RegistryKeyPath containsCIS "\Group Policy\Scripts\Logoff" OR RegistryKeyPath containsCIS "\Explorer\ShellServiceObjects" OR RegistryKeyPath containsCIS "\Explorer\ShellIconOverlayIdentifiers" OR RegistryKeyPath containsCIS "\Explorer\ShellExecuteHooks" OR RegistryKeyPath containsCIS "\Explorer\SharedTaskScheduler" OR RegistryKeyPath containsCIS "\Explorer\Browser Helper Objects" OR RegistryKeyPath containsCIS "\Authentication\PLAP Providers" OR RegistryKeyPath containsCIS "\Authentication\Credential Providers" OR RegistryKeyPath containsCIS "\Authentication\Credential Provider Filters")) AND (NOT (((RegistryValue In Contains AnyCase ("\"C:\Program Files\AVG\Antivirus\AvLaunch.exe\" /gui","\"C:\Program Files (x86)\AVG\Antivirus\AvLaunch.exe\" /gui","{472083B0-C522-11CF-8763-00608CC02F24}")) AND SrcProcImagePath startswithCIS "C:\Program Files\AVG\Antivirus\Setup\") OR (RegistryValue = "(Empty)" OR RegistryKeyPath endswithCIS "\NgcFirst\ConsecutiveSwitchCount" OR (SrcProcImagePath endswithCIS "\AppData\Local\Microsoft\OneDrive\Update\OneDriveSetup.exe" OR SrcProcImagePath endswithCIS "\AppData\Roaming\Spotify\Spotify.exe" OR SrcProcImagePath endswithCIS "\AppData\Local\WebEx\WebexHost.exe") OR (SrcProcImagePath In Contains AnyCase ("C:\WINDOWS\system32\devicecensus.exe","C:\Windows\system32\winsat.exe","C:\Program Files\Microsoft OneDrive\StandaloneUpdater\OneDriveSetup.exe","C:\Program Files\Microsoft OneDrive\Update\OneDriveSetup.exe","C:\Program Files (x86)\Microsoft OneDrive\Update\OneDriveSetup.exe","C:\Program Files\KeePass Password Safe 2\ShInstUtil.exe","C:\Program Files\Everything\Everything.exe","C:\Program Files (x86)\Microsoft Office\root\integration\integrator.exe"))) OR (RegistryValue = "C:\Program Files\Aurora-Agent\tools\aurora-dashboard.exe" AND (SrcProcImagePath endswithCIS "\aurora-agent-64.exe" OR SrcProcImagePath endswithCIS "\aurora-agent.exe") AND RegistryKeyPath endswithCIS "\Microsoft\Windows\CurrentVersion\Run\aurora-dashboard") OR (RegistryValue = "ctfmon.exe /n" AND SrcProcImagePath = "C:\Windows\system32\userinit.exe") OR SrcProcImagePath = "C:\Program Files\Windows Defender\MsMpEng.exe" OR (RegistryValue endswithCIS "A251-47B7-93E1-CDD82E34AF8B}" AND SrcProcImagePath = "C:\Windows\system32\regsvr32.exe" AND RegistryKeyPath containsCIS "DropboxExt") OR (SrcProcImagePath startswithCIS "C:\Program Files (x86)\Microsoft\EdgeUpdate\Install\" OR SrcProcImagePath startswithCIS "C:\Program Files (x86)\Microsoft\EdgeWebView\" OR SrcProcImagePath startswithCIS "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe") OR (RegistryValue endswithCIS "\Everything\Everything.exe\" -startup" AND RegistryKeyPath endswithCIS "\Microsoft\Windows\CurrentVersion\Run\Everything") OR (RegistryValue containsCIS "\GoogleDriveFS.exe" AND RegistryValue startswithCIS "C:\Program Files\Google\Drive File Stream\" AND RegistryKeyPath endswithCIS "\Software\Microsoft\Windows\CurrentVersion\Run\GoogleDriveFS") OR ((RegistryValue In Contains AnyCase ("{CFE8B367-77A7-41D7-9C90-75D16D7DC6B6}","{A8E52322-8734-481D-A7E2-27B309EF8D56}","{C973DA94-CBDF-4E77-81D1-E5B794FBD146}","{51EF1569-67EE-4AD6-9646-E726C3FFC8A2}")) AND RegistryKeyPath containsCIS "GoogleDrive") OR (RegistryValue = "C:\Program Files\Greenshot\Greenshot.exe" AND RegistryKeyPath endswithCIS "\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Greenshot") OR (RegistryValue = "\"C:\Program Files\iTunes\iTunesHelper.exe\"" AND RegistryKeyPath endswithCIS "\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\iTunesHelper") OR (SrcProcImagePath = "C:\Windows\system32\LogonUI.exe" AND (RegistryKeyPath containsCIS "\Authentication\Credential Providers\{D6886603-9D2F-4EB2-B667-1971041FA96B}\" OR RegistryKeyPath containsCIS "\Authentication\Credential Providers\{BEC09223-B018-416D-A0AC-523971B639F5}\" OR RegistryKeyPath containsCIS "\Authentication\Credential Providers\{8AF662BF-65A0-4D0A-A540-A338A999D36F}\" OR RegistryKeyPath containsCIS "\Authentication\Credential Providers\{27FBDB57-B613-4AF2-9D7E-4FA7A66C21AD}\")) OR (SrcProcImagePath endswithCIS "\OfficeClickToRun.exe" AND (SrcProcImagePath startswithCIS "C:\Program Files\Common Files\Microsoft Shared\ClickToRun\" OR SrcProcImagePath startswithCIS "C:\Program Files\Common Files\Microsoft Shared\ClickToRun\Updates\")) OR (RegistryValue containsCIS "\AppData\Local\Microsoft\OneDrive\" AND (RegistryValue startswithCIS "C:\Windows\system32\cmd.exe /q /c rmdir /s /q \"C:\Users\" OR RegistryValue startswithCIS "C:\Windows\system32\cmd.exe /q /c del /q \"C:\Users\")) OR (RegistryValue = "C:\Program Files\Opera\assistant\browser_assistant.exe" AND RegistryKeyPath endswithCIS "\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Opera Browser Assistant") OR ((RegistryValue containsCIS "\AppData\Local\Package Cache\{" AND RegistryValue containsCIS "}\python-") AND RegistryValue endswithCIS ".exe\" /burn.runonce" AND RegistryKeyPath containsCIS "\Microsoft\Windows\CurrentVersion\RunOnce\{") OR (RegistryValue containsCIS "\Microsoft\Teams\Update.exe --processStart " AND SrcProcImagePath endswithCIS "\Microsoft\Teams\current\Teams.exe") OR (RegistryValue = "\"C:\Program Files\Zoom\bin\installer.exe\" /repair" AND RegistryKeyPath endswithCIS "\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce\zoommsirepair")))))
+
+```

@@ -1,0 +1,34 @@
+# proc_creation_win_powershell_defender_disable_feature
+
+## Title
+Powershell Defender Disable Scan Feature
+
+## ID
+1ec65a5f-9473-4f12-97da-622044d6df21
+
+## Author
+Florian Roth (Nextron Systems)
+
+## Date
+2022-03-03
+
+## Tags
+attack.defense-evasion, attack.t1562.001
+
+## Description
+Detects requests to disable Microsoft Defender features using PowerShell commands
+
+## References
+https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference?view=windowsserver2022-ps
+https://www.virustotal.com/gui/file/d609799091731d83d75ec5d1f030571af20c45efeeb94840b67ea09a3283ab65/behavior/C2AE
+https://www.virustotal.com/gui/search/content%253A%2522Set-MpPreference%2520-Disable%2522/files
+
+## False Positives
+Possible administrative activity
+Other Cmdlets that may use the same parameters
+
+## SentinelOne Query
+```
+EventType = "Process Creation" AND (EndpointOS = "windows" AND (((TgtProcCmdLine containsCIS "Add-MpPreference " OR TgtProcCmdLine containsCIS "Set-MpPreference ") AND (TgtProcCmdLine containsCIS "DisableArchiveScanning " OR TgtProcCmdLine containsCIS "DisableRealtimeMonitoring " OR TgtProcCmdLine containsCIS "DisableIOAVProtection " OR TgtProcCmdLine containsCIS "DisableBehaviorMonitoring " OR TgtProcCmdLine containsCIS "DisableBlockAtFirstSeen " OR TgtProcCmdLine containsCIS "DisableCatchupFullScan " OR TgtProcCmdLine containsCIS "DisableCatchupQuickScan ") AND (TgtProcCmdLine containsCIS "$true" OR TgtProcCmdLine containsCIS " 1 ")) OR ((TgtProcCmdLine containsCIS "RABpAHMAYQBiAGwAZQBSAGUAYQBsAHQAaQBtAGUATQBvAG4AaQB0AG8AcgBpAG4AZwAgA" OR TgtProcCmdLine containsCIS "QAaQBzAGEAYgBsAGUAUgBlAGEAbAB0AGkAbQBlAE0AbwBuAGkAdABvAHIAaQBuAGcAIA" OR TgtProcCmdLine containsCIS "EAGkAcwBhAGIAbABlAFIAZQBhAGwAdABpAG0AZQBNAG8AbgBpAHQAbwByAGkAbgBnACAA" OR TgtProcCmdLine containsCIS "RABpAHMAYQBiAGwAZQBJAE8AQQBWAFAAcgBvAHQAZQBjAHQAaQBvAG4AIA" OR TgtProcCmdLine containsCIS "QAaQBzAGEAYgBsAGUASQBPAEEAVgBQAHIAbwB0AGUAYwB0AGkAbwBuACAA" OR TgtProcCmdLine containsCIS "EAGkAcwBhAGIAbABlAEkATwBBAFYAUAByAG8AdABlAGMAdABpAG8AbgAgA" OR TgtProcCmdLine containsCIS "RABpAHMAYQBiAGwAZQBCAGUAaABhAHYAaQBvAHIATQBvAG4AaQB0AG8AcgBpAG4AZwAgA" OR TgtProcCmdLine containsCIS "QAaQBzAGEAYgBsAGUAQgBlAGgAYQB2AGkAbwByAE0AbwBuAGkAdABvAHIAaQBuAGcAIA" OR TgtProcCmdLine containsCIS "EAGkAcwBhAGIAbABlAEIAZQBoAGEAdgBpAG8AcgBNAG8AbgBpAHQAbwByAGkAbgBnACAA" OR TgtProcCmdLine containsCIS "RABpAHMAYQBiAGwAZQBCAGwAbwBjAGsAQQB0AEYAaQByAHMAdABTAGUAZQBuACAA" OR TgtProcCmdLine containsCIS "QAaQBzAGEAYgBsAGUAQgBsAG8AYwBrAEEAdABGAGkAcgBzAHQAUwBlAGUAbgAgA" OR TgtProcCmdLine containsCIS "EAGkAcwBhAGIAbABlAEIAbABvAGMAawBBAHQARgBpAHIAcwB0AFMAZQBlAG4AIA" OR TgtProcCmdLine containsCIS "ZABpAHMAYQBiAGwAZQByAGUAYQBsAHQAaQBtAGUAbQBvAG4AaQB0AG8AcgBpAG4AZwAgA" OR TgtProcCmdLine containsCIS "QAaQBzAGEAYgBsAGUAcgBlAGEAbAB0AGkAbQBlAG0AbwBuAGkAdABvAHIAaQBuAGcAIA" OR TgtProcCmdLine containsCIS "kAGkAcwBhAGIAbABlAHIAZQBhAGwAdABpAG0AZQBtAG8AbgBpAHQAbwByAGkAbgBnACAA" OR TgtProcCmdLine containsCIS "ZABpAHMAYQBiAGwAZQBpAG8AYQB2AHAAcgBvAHQAZQBjAHQAaQBvAG4AIA" OR TgtProcCmdLine containsCIS "QAaQBzAGEAYgBsAGUAaQBvAGEAdgBwAHIAbwB0AGUAYwB0AGkAbwBuACAA" OR TgtProcCmdLine containsCIS "kAGkAcwBhAGIAbABlAGkAbwBhAHYAcAByAG8AdABlAGMAdABpAG8AbgAgA" OR TgtProcCmdLine containsCIS "ZABpAHMAYQBiAGwAZQBiAGUAaABhAHYAaQBvAHIAbQBvAG4AaQB0AG8AcgBpAG4AZwAgA" OR TgtProcCmdLine containsCIS "QAaQBzAGEAYgBsAGUAYgBlAGgAYQB2AGkAbwByAG0AbwBuAGkAdABvAHIAaQBuAGcAIA" OR TgtProcCmdLine containsCIS "kAGkAcwBhAGIAbABlAGIAZQBoAGEAdgBpAG8AcgBtAG8AbgBpAHQAbwByAGkAbgBnACAA" OR TgtProcCmdLine containsCIS "ZABpAHMAYQBiAGwAZQBiAGwAbwBjAGsAYQB0AGYAaQByAHMAdABzAGUAZQBuACAA" OR TgtProcCmdLine containsCIS "QAaQBzAGEAYgBsAGUAYgBsAG8AYwBrAGEAdABmAGkAcgBzAHQAcwBlAGUAbgAgA" OR TgtProcCmdLine containsCIS "kAGkAcwBhAGIAbABlAGIAbABvAGMAawBhAHQAZgBpAHIAcwB0AHMAZQBlAG4AIA" OR TgtProcCmdLine containsCIS "RABpAHMAYQBiAGwAZQBDAGEAdABjAGgAdQBwAEYAdQBsAGwAUwBjAGEAbgA" OR TgtProcCmdLine containsCIS "RABpAHMAYQBiAGwAZQBDAGEAdABjAGgAdQBwAFEAdQBpAGMAawBTAGMAYQBuAA" OR TgtProcCmdLine containsCIS "RABpAHMAYQBiAGwAZQBBAHIAYwBoAGkAdgBlAFMAYwBhAG4AbgBpAG4AZwA") OR (TgtProcCmdLine containsCIS "ZGlzYWJsZWFyY2hpdmVzY2FubmluZy" OR TgtProcCmdLine containsCIS "Rpc2FibGVhcmNoaXZlc2Nhbm5pbmcg" OR TgtProcCmdLine containsCIS "kaXNhYmxlYXJjaGl2ZXNjYW5uaW5nI" OR TgtProcCmdLine containsCIS "RGlzYWJsZUFyY2hpdmVTY2FubmluZy" OR TgtProcCmdLine containsCIS "Rpc2FibGVBcmNoaXZlU2Nhbm5pbmcg" OR TgtProcCmdLine containsCIS "EaXNhYmxlQXJjaGl2ZVNjYW5uaW5nI" OR TgtProcCmdLine containsCIS "ZGlzYWJsZWJlaGF2aW9ybW9uaXRvcmluZy" OR TgtProcCmdLine containsCIS "Rpc2FibGViZWhhdmlvcm1vbml0b3Jpbmcg" OR TgtProcCmdLine containsCIS "kaXNhYmxlYmVoYXZpb3Jtb25pdG9yaW5nI" OR TgtProcCmdLine containsCIS "RGlzYWJsZUJlaGF2aW9yTW9uaXRvcmluZy" OR TgtProcCmdLine containsCIS "Rpc2FibGVCZWhhdmlvck1vbml0b3Jpbmcg" OR TgtProcCmdLine containsCIS "EaXNhYmxlQmVoYXZpb3JNb25pdG9yaW5nI" OR TgtProcCmdLine containsCIS "ZGlzYWJsZWJsb2NrYXRmaXJzdHNlZW4g" OR TgtProcCmdLine containsCIS "Rpc2FibGVibG9ja2F0Zmlyc3RzZWVuI" OR TgtProcCmdLine containsCIS "kaXNhYmxlYmxvY2thdGZpcnN0c2Vlbi" OR TgtProcCmdLine containsCIS "RGlzYWJsZUJsb2NrQXRGaXJzdFNlZW4g" OR TgtProcCmdLine containsCIS "Rpc2FibGVCbG9ja0F0Rmlyc3RTZWVuI" OR TgtProcCmdLine containsCIS "EaXNhYmxlQmxvY2tBdEZpcnN0U2Vlbi" OR TgtProcCmdLine containsCIS "ZGlzYWJsZWNhdGNodXBmdWxsc2Nhbi" OR TgtProcCmdLine containsCIS "Rpc2FibGVjYXRjaHVwZnVsbHNjYW4g" OR TgtProcCmdLine containsCIS "kaXNhYmxlY2F0Y2h1cGZ1bGxzY2FuI" OR TgtProcCmdLine containsCIS "RGlzYWJsZUNhdGNodXBGdWxsU2Nhbi" OR TgtProcCmdLine containsCIS "Rpc2FibGVDYXRjaHVwRnVsbFNjYW4g" OR TgtProcCmdLine containsCIS "EaXNhYmxlQ2F0Y2h1cEZ1bGxTY2FuI" OR TgtProcCmdLine containsCIS "ZGlzYWJsZWNhdGNodXBxdWlja3NjYW4g" OR TgtProcCmdLine containsCIS "Rpc2FibGVjYXRjaHVwcXVpY2tzY2FuI" OR TgtProcCmdLine containsCIS "kaXNhYmxlY2F0Y2h1cHF1aWNrc2Nhbi" OR TgtProcCmdLine containsCIS "RGlzYWJsZUNhdGNodXBRdWlja1NjYW4g" OR TgtProcCmdLine containsCIS "Rpc2FibGVDYXRjaHVwUXVpY2tTY2FuI" OR TgtProcCmdLine containsCIS "EaXNhYmxlQ2F0Y2h1cFF1aWNrU2Nhbi" OR TgtProcCmdLine containsCIS "ZGlzYWJsZWlvYXZwcm90ZWN0aW9uI" OR TgtProcCmdLine containsCIS "Rpc2FibGVpb2F2cHJvdGVjdGlvbi" OR TgtProcCmdLine containsCIS "kaXNhYmxlaW9hdnByb3RlY3Rpb24g" OR TgtProcCmdLine containsCIS "RGlzYWJsZUlPQVZQcm90ZWN0aW9uI" OR TgtProcCmdLine containsCIS "Rpc2FibGVJT0FWUHJvdGVjdGlvbi" OR TgtProcCmdLine containsCIS "EaXNhYmxlSU9BVlByb3RlY3Rpb24g" OR TgtProcCmdLine containsCIS "ZGlzYWJsZXJlYWx0aW1lbW9uaXRvcmluZy" OR TgtProcCmdLine containsCIS "Rpc2FibGVyZWFsdGltZW1vbml0b3Jpbmcg" OR TgtProcCmdLine containsCIS "kaXNhYmxlcmVhbHRpbWVtb25pdG9yaW5nI" OR TgtProcCmdLine containsCIS "RGlzYWJsZVJlYWx0aW1lTW9uaXRvcmluZy" OR TgtProcCmdLine containsCIS "Rpc2FibGVSZWFsdGltZU1vbml0b3Jpbmcg" OR TgtProcCmdLine containsCIS "EaXNhYmxlUmVhbHRpbWVNb25pdG9yaW5nI"))))
+
+```
